@@ -9,6 +9,8 @@ export default function App(){
   const [comments, setComments]=useState(data.comments)
   const [currentUser]=useState(data.currentUser)
   const [replys, setReplys]=useState(data.replys)
+  const [editText, setEditText]=useState("")
+  const [deleteDev, setDeleteDev]=useState(null)
 
   function handleAdd(){
     if(!input.trim()) return
@@ -35,10 +37,33 @@ export default function App(){
 
   function handleDownvote(id){
     setComments(
-      comments.map(c=>
-        c.id=== id
+      comments.map(
+
+       c=> c.id=== id
         ?{...c,  score: c.score-1}
         : c
+      )
+    )
+  }
+  function handleDelete(id){
+    const cn=window.confirm("Are you sure you want to delete this comment? This will remove the comment and can't be")
+    if(!cn)return
+    setComments(
+      comments.filter(
+        c=>c.id !==id
+      )
+    )
+    setDeleteDev(null)
+  }
+  function handleDeleteClick(id){
+    setDeleteDev(id)
+  }
+  function handleEdit(id, newText){
+    setComments(
+      comments.map(
+        c=>c.id=== id
+        ?{...c,content:newText}
+        :c
       )
     )
   }
@@ -60,6 +85,8 @@ export default function App(){
             currentUser={currentUser}
             onDownVote={handleDownvote}
             onUpVote={handleUpvote}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
         />
 
           ))
