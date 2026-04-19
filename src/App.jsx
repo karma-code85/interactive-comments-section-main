@@ -1,42 +1,65 @@
-import { use, useState } from "react";
+import {  useState } from "react";
 import Comment from "./component/commentList";
+import data from "./data.json"
+
 
 export default function App(){
 
   const [input, setInput]=useState("")
-  const [comment, setComment]=useState([])
+  const [comments, setComments]=useState(data.comments)
+  const [currentUser]=useState(data.currentUser)
+  const [replys, setReplys]=useState(data.replys)
 
   function handleAdd(){
     if(!input.trim()) return
     const newComment={
       id:Date.now(),
-      text:input,
-      username: "marwan",
-      url: "/images/avatars/image-amyrobson.png",
-      publishTime: "Today",
-      score: 0,
-
-
+      content:input,
+      createdAt:"just now",
+      score:0,
+      user:currentUser,
+      replyes:[]
     }
-    setComment([...comment, newComment])
+    setComments([...comments, newComment])
     setInput("")
 
   }
+  function handleUpvote(id){
+    setComments(
+      comments.map(c=>
+        c.id===id
+        ?{...c, score: c.score+1}:c
+      )
+    )
+  }
+
+  function handleDownvote(id){
+    setComments(
+      comments.map(c=>
+        c.id=== id
+        ?{...c,  score: c.score-1}
+        : c
+      )
+    )
+  }
   return(
     <div className="bg-gray-200 min-h-screen flex justify-center items-center p-4 space-y-6">
-      <div  className="space-y-6">
-        {comment.length===0?(
+      <div  className="space-y-6 w-full">
+        {comments.length===0?(
 
           <p className="bg-white  p-2 rounded shadow text-slate-500 ">no comments add yet...</p>
         ):(
-          comment.map((c)=>(
+          comments.map((comment)=>(
             <Comment
-            key={c.id}
-        url={c.url}
-        username={c.username}
-        publishTime={c.publishTime}
-        score={c.score}
-        text={c.text}
+            key={comment.id}
+            id={comment.id}
+            content={comment.content}
+            createdAt={comment.createdAt}
+            score={comment.score}
+            user={comment.user}
+            currentUser={currentUser}
+            onDownVote={handleDownvote}
+            onUpVote={handleUpvote}
         />
 
           ))
@@ -54,7 +77,7 @@ export default function App(){
 
         ></textarea>
         <div className="flex justify-between">
-          <img src="/images/avatars/image-amyrobson.png" alt="" className="w-8 h-8"/>
+          <img src="/images/avatars/image-juliusomo.png" alt="" className="w-8 h-8"/>
           <button
           onClick={handleAdd}
           className="bg-[hsl(238,40%,52%)] font-bold text-white p-2 text-center  rounded">Send</button>
