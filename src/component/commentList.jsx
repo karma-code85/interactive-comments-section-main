@@ -11,13 +11,27 @@ export default function Comment({id,
     onUpVote,
     onDownVote,
     onDelete,
-    onEdit
-
+    onEdit,
+    onAddReply,
+    onEditReply,
+    onUpvoteReply,
+    onDownvoteReply,
+    onDeleteReply,
+    replies=[]
   })
   {
     const [isEditing, setIsEditing]=useState(false)
     const [text, setText]=useState(content)
+    const [showReplyBox, setShowReplyBox]=useState(false)
+    const [replyInput, setReplyInput]=useState("")
   const isMe=user.username===currentUser.username
+
+  function submitReply(){
+    if(!replyInput.trim()) return
+    onAddReply(id,replyInput )
+    setReplyInput("")
+    setShowReplyBox(false)
+  }
 
   return(
     <div className="bg-white shadow-xl p-4 rounded  space-y-6 w-full max-w-2xl ">
@@ -82,8 +96,86 @@ export default function Comment({id,
         </div>
           )}
 
+
         </div>
-      </div>
+        </div>
+
+        {replies.length >0 && (
+            <div className="md:ml-6 md:pl-2 border-l-2 border-gray-500">
+              {replies.map(reply=>(
+                <div className="bg-white p-4 rounded shadow space-6" key={reply.id}>
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-4 items-center">
+                      <img src={reply.user.image.png} alt=""
+                      className="h-4 w-4 rounded-full "
+                      />
+                      <span>{reply.user.username}</span>
+                      {reply.user.username===currentUser.username &&
+                        <span>you</span>
+                      }
+                    </div>
+                    <span>{reply.createdAt}</span>
+                  </div>
+                  <p><span className="text-[hsl(238,40%,52%)] font-bold">@{reply.replyingTo}</span>
+                    {reply.content}
+                  </p>
+                  <div>
+                    <div className="flex gap-4 items-center bg-gray-100 p-2 rounded">
+                      <button onClick={()=>onUpvoteReply(id, reply.id)}>
+                        <img src="/images/icon-plus.svg" alt="" />
+                      </button>
+                      <span>{reply.score}</span>
+                      <button onClick={()=>onDownvoteReply(id, reply.id)}>
+                        <img src="icon-minus.svg" alt="" />
+                      </button>
+                    </div>
+                    <div className="flex gap-4">
+                      {reply.user.username===currentUser.username ?(
+                        <div>
+                          <button onClick={()=>onDeleteReply(id, reply.id)}>
+                            <img src="/images/icon-delete.svg" alt="" />delete
+                          </button>
+                          <button onClick={()=>onEditReply(id, reply.id)}>
+                            <img src="/images/icon-edit.svg" alt="" />
+                            Edit
+                            </button>
+                        </div>
+                      ):(
+                        <div onClick={()=> setShowReplyBox(!showReplyBox)}>
+                          {showReplyBox &&(
+                              <div>
+
+                                <input
+                                value={replyInput}
+                                 type="text"
+                                  onChange={(e)=>replyInput(e.target.value)}
+                                 className="border p-2 flex-1"
+                                  placeholder="Write a reply..."
+
+                                  />
+
+                              </div>
+                            )}
+                          <button onClick={submitReply}>
+
+                            <img src="/images/icon-reply.svg" alt="" />
+                            Reply
+                            </button>
+                        </div>
+                      )}
+
+                    </div>
+                  </div>
+                </div>
+              )
+
+              )}
+
+            </div>
+          )}
+
+
+
 
     </div>
   )
