@@ -128,7 +128,7 @@ function handleDownvoteToReply(commentId, replyId){
     )
   }
   return(
-    <div className="bg-rose-200 min-h-screen flex justify-center items-center p-4 space-y-6 ">
+    <div className="bg-gray-100 min-h-screen flex justify-center items-center p-4 space-y-6 ">
       <div  className="space-y-6 w-full mx-auto max-w-6xl">
         {comments.length===0?(
 

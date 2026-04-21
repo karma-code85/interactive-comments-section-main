@@ -35,7 +35,7 @@ export default function Comment({id,
 
   return(
     <div className="bg-white shadow-xl p-4 rounded  space-y-6 w-full max-w-2xl ">
-      <div></div>
+
       <div className="flex justify-between items-center w-full">
         <div className="flex gap-4">
         <img src={user.image.png} alt="profile"  className="w-8 h-8 rounded-full "/>
@@ -93,49 +93,56 @@ export default function Comment({id,
           <div className="flex gap-1 items-center justify-center cursor-pointer">
           <img src="/images/icon-reply.svg" alt="" className="h-3 w-3 " />
           <span className="font-bold text-[hsl(238,40%,52%)]">Reply</span>
+
         </div>
+
           )}
 
 
         </div>
+
         </div>
 
+
         {replies.length >0 && (
-            <div className="md:ml-6 md:pl-2 border-l-2 border-gray-500">
+            <div className="md:ml-6 md:pl-2 border-l-2 border-gray-500 space-y-2 shadow-lg ">
               {replies.map(reply=>(
-                <div className="bg-white p-4 rounded shadow space-6" key={reply.id}>
-                  <div className="flex justify-between items-center">
-                    <div className="flex gap-4 items-center">
+                <div className="bg-white-500 shadow p-2 rounded shadow space-y-6 text-gray-500 " key={reply.id}>
+                  <div className="flex justify-between items-center ">
+                    <div className="flex gap-2 items-center">
                       <img src={reply.user.image.png} alt=""
                       className="h-4 w-4 rounded-full "
                       />
                       <span>{reply.user.username}</span>
                       {reply.user.username===currentUser.username &&
-                        <span>you</span>
+                        <span className="rounded px-2 text-white bg-[hsl(238,40%,52%)]">you</span>
                       }
                     </div>
-                    <span>{reply.createdAt}</span>
+                    <span >{reply.createdAt}</span>
                   </div>
                   <p><span className="text-[hsl(238,40%,52%)] font-bold">@{reply.replyingTo}</span>
                     {reply.content}
                   </p>
-                  <div>
-                    <div className="flex gap-4 items-center bg-gray-100 p-2 rounded">
+                  <div className="flex justify-between">
+                    <div className="flex gap-4 items-center  p-2 rounded bg-gray-100 ">
                       <button onClick={()=>onUpvoteReply(id, reply.id)}>
                         <img src="/images/icon-plus.svg" alt="" />
                       </button>
-                      <span>{reply.score}</span>
+                      <span className="text-[hsl(238,40%,52%)] font-bold">{reply.score}</span>
                       <button onClick={()=>onDownvoteReply(id, reply.id)}>
-                        <img src="icon-minus.svg" alt="" />
+                        <img src="/images/icon-minus.svg" alt="" />
                       </button>
                     </div>
                     <div className="flex gap-4">
                       {reply.user.username===currentUser.username ?(
-                        <div>
-                          <button onClick={()=>onDeleteReply(id, reply.id)}>
-                            <img src="/images/icon-delete.svg" alt="" />delete
+                        <div className="flex gap-2">
+                          <button
+                          className="flex gap-1 items-center justify-center text-rose-500 font-semibold"
+                          onClick={()=>onDeleteReply(id, reply.id)}>
+                            <img src="/images/icon-delete.svg" className="w-3 h-3" alt="" />delete
                           </button>
-                          <button onClick={()=>onEditReply(id, reply.id)}>
+                          <button className=" flex gap-1 items-center justify-center font-semibold text-[hsl(238,40%,52%)]"
+                           onClick={()=>onEditReply(id, reply.id)} >
                             <img src="/images/icon-edit.svg" alt="" />
                             Edit
                             </button>
@@ -172,6 +179,8 @@ export default function Comment({id,
               )}
 
             </div>
+
+
           )}
 
 
