@@ -8,9 +8,7 @@ export default function App(){
   const [input, setInput]=useState("")
   const [comments, setComments]=useState(data.comments)
   const [currentUser]=useState(data.currentUser)
-  const [deleteDev, setDeleteDev]=useState(null)
-  // const [commentId, setCommentId]=useState(data.comments)
-  const [replyingTo]=useState(data.replyingTo)
+
 
 
   function handleAddReply(commentId, replyText){
@@ -115,7 +113,7 @@ function handleDownvoteToReply(commentId, replyId){
         c=>c.id !==id
       )
     )
-    setDeleteDev(null)
+    
   }
 
   function handleEdit(id, newText){
