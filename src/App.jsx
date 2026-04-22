@@ -11,60 +11,79 @@ export default function App(){
 
 
 
-  function handleAddReply(commentId, replyText){
+  function handleAddReply(commentId, replyText,replyingTo){
     setComments(prev=>
       prev.map(c=>
       c.id===commentId
     ? {...c,
-      replyes:[...(c.replyes|| []),{
+      replies:[...(c.replies|| []),{
         id:Date.now(),
         content: replyText,
         createdAt:"just now",
-        scroe:0,
+        score:0,
         replyingTo:c.user.username,
-        user:currentUser
-
+        user:currentUser, replyingTo
       }]
     }:c
 
     ))
   }
-function handleEditReply(commentId, replyText,newReply){
-  setComments(comments.map(c=>
-    c.id===commentId
-    ?{
-      ...c,
-      replies:c.replies.map(r=>
-        r.id===replyText?{...r, content:newReply}:r
-      )
-
-    }:c
-
-  ))
+function handleEditReply(commentId, replyId,newReply){
+  setComments((prev)=>
+    prev.map(c=>
+      c.id===commentId
+      ?{...c,
+        replies:c.replies.map(r=>
+          r.id===replyId
+          ? {...r, content:newReply}
+          : r
+        )
+      }
+:c
+    )
+  )
 }
 function handleDeleteReply(commentId,replyId){
   const confirm=window.confirm("are you sure wanna to delete your reply")
   if(!confirm)return
-  setComments(commentId.map(c=>c.id===commentId
-    ?{...c,   replies:c.replies.filter(r=>r.id !==replyId)}:c
-  ))
+
+  setComments((prev)=>
+    prev.map(c=>
+      c.id===commentId
+      ?{...c,
+        replies:c.replies.filter(r=>
+          r.id !==replyId
+        )
+
+      }
+      :c
+    )
+  )
 }
 function handleUpvoteToReply(commentId, replyId){
-  setComments(commentId.map(c=>c.id===commentId
-    ?{...c,replies:c.replies.map(r=>
-      r.id===replyId?{...r, score:Math.max(0,r.score+1)}:r
-    )}:
-    c
+  setComments((prev)=>
+  prev.map(c=>
+    c.id===commentId
+    ?{...c, replies:c.replies.map(r=>
+      r.id===replyId
+      ?{...r, score:Math.max(0, r.score+1)}
+      : r
+
+    )}
+    :c
   ))
 }
 
 
 function handleDownvoteToReply(commentId, replyId){
-  setComments(commentId.map(c=>c.id===commentId
-    ?{...c, replies:c.replies.map(r=>r.id===replyId
-      ?{...r,score: Math.max(0, r.score-1)}:r
-
-    )}:c
+  setComments((prev)=>
+  prev.map(c=>
+    c.id===commentId
+    ?{...c, replies:c.replies.map(r=>
+      r.id===replyId
+      ?{...r, score:Math.max(0, r.score-1)}:r
+    )}
+:c
   ))
 }
 
@@ -80,7 +99,7 @@ function handleDownvoteToReply(commentId, replyId){
       createdAt:"just now",
       score:0,
       user:currentUser,
-      replyes:[]
+      replies:[]
     }
     setComments([...comments, newComment])
     setInput("")
@@ -90,7 +109,8 @@ function handleDownvoteToReply(commentId, replyId){
     setComments(
       comments.map(c=>
         c.id===id
-        ?{...c, score: c.score+1}:c
+        ? {...c, score: c.score+1}
+        :c
       )
     )
   }
@@ -110,18 +130,18 @@ function handleDownvoteToReply(commentId, replyId){
     if(!cn)return
     setComments(
       comments.filter(
-        c=>c.id !==id
+        c=> c.id !==id
       )
     )
-    
+
   }
 
   function handleEdit(id, newText){
     setComments(
       comments.map(
         c=>c.id=== id
-        ?{...c,content:newText}
-        :c
+        ? {...c,content:newText}
+        : c
       )
     )
   }
@@ -175,10 +195,7 @@ function handleDownvoteToReply(commentId, replyId){
         </div>
 
        </div>
-
-
       </div>
-
     </div>
   )
 }

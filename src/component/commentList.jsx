@@ -22,15 +22,15 @@ export default function Comment({id,
   {
     const [isEditing, setIsEditing]=useState(false)
     const [text, setText]=useState(content)
-    const [showReplyBox, setShowReplyBox]=useState(false)
+    const[activeReplId, setActiveReplyId]=useState(null)
     const [replyInput, setReplyInput]=useState("")
   const isMe=user.username===currentUser.username
 
-  function submitReply(){
+  function submitReply(replyingTo){
     if(!replyInput.trim()) return
-    onAddReply(id,replyInput )
+    onAddReply(id,replyInput ,replyingTo)
     setReplyInput("")
-    setShowReplyBox(false)
+    setActiveReplyId(false)
   }
 
   return(
@@ -85,27 +85,22 @@ export default function Comment({id,
           {isMe?(
             <div className="flex gap-2 items-center cursor-pointer">
           <div className="flex gap-2 items-center" onClick={()=>onDelete(id)}><img src="/images/icon-delete.svg" alt="" className="w-3 h-3" /><span className="text-rose-500 font-bold">Delete</span></div>
-          <div className="flex gap-2 items-center" onClick={()=>setIsEditing(true)}><img src="/images/icon-edit.svg" alt="" className="w-3 h-3"/><span className="text-[hsl(238,40%,52%)] font-bold">Edit</span></div>
+          <div className="flex gap-2 items-center justify-center" onClick={()=>setIsEditing(true)}><img src="/images/icon-edit.svg" alt="" className="w-3 h-3"/><span className="text-[hsl(238,40%,52%)] font-bold">Edit</span></div>
         </div>
 
           ):(
 
           <div className="flex gap-1 items-center justify-center cursor-pointer">
           <img src="/images/icon-reply.svg" alt="" className="h-3 w-3 " />
-          <span className="font-bold text-[hsl(238,40%,52%)]">Reply</span>
+          <span className="font-bold text-[hsl(238,40%,52%)]" onClick={()=>onAddReply(id)}>Reply</span>
 
         </div>
 
           )}
-
-
         </div>
-
         </div>
-
-
         {replies.length >0 && (
-            <div className="md:ml-6 md:pl-2 border-l-2 border-gray-500 space-y-2 shadow-lg ">
+            <div className="md:ml-6 pl-4 border-l-2 border-gray-500 space-y-2 shadow-lg ">
               {replies.map(reply=>(
                 <div className="bg-white-500 shadow p-2 rounded shadow space-y-6 text-gray-500 " key={reply.id}>
                   <div className="flex justify-between items-center ">
@@ -148,24 +143,23 @@ export default function Comment({id,
                             </button>
                         </div>
                       ):(
-                        <div onClick={()=> setShowReplyBox(!showReplyBox)}>
-                          {showReplyBox &&(
+                        <div onClick={()=> setActiveReplyId(reply.id)} className="flex justify-center items-center flex-col">
+                          {activeReplId ===reply.id &&(
                               <div>
 
                                 <input
                                 value={replyInput}
                                  type="text"
-                                  onChange={(e)=>replyInput(e.target.value)}
-                                 className="border p-2 flex-1"
+                                  onChange={(e)=>setReplyInput(e.target.value)}
+                                 className="border p-2 flex-1 overflow-hidden mb-2"
                                   placeholder="Write a reply..."
 
                                   />
-
                               </div>
                             )}
-                          <button onClick={submitReply}>
+                          <button onClick={submitReply} className="flex gap-2 items-center justify-center text-[hsl(238,40%,52%)] font-bold">
 
-                            <img src="/images/icon-reply.svg" alt="" />
+                            <img src="/images/icon-reply.svg" alt=""  className="h-3 w-3"/>
                             Reply
                             </button>
                         </div>
@@ -180,12 +174,7 @@ export default function Comment({id,
 
             </div>
 
-
           )}
-
-
-
-
     </div>
   )
 }
