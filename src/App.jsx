@@ -22,7 +22,7 @@ export default function App(){
         createdAt:"just now",
         score:0,
         replyingTo:c.user.username,
-        user:currentUser, 
+        user:currentUser,
       }]
     }:c
 
@@ -147,7 +147,7 @@ function handleDownvoteToReply(commentId, replyId){
   }
   return(
     <div className="bg-gray-100 min-h-screen flex justify-center items-center p-4 space-y-6 ">
-      <div  className="space-y-6 w-full mx-auto max-w-6xl">
+      <div  className="space-y-6 w-full mx-auto max-w-6xl  flex justify-center items-center flex-col">
         {comments.length===0?(
 
           <p className="bg-white  p-2 rounded shadow text-slate-500 ">no comments add yet...</p>
