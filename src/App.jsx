@@ -22,7 +22,7 @@ export default function App(){
         createdAt:"just now",
         score:0,
         replyingTo:c.user.username,
-        user:currentUser, replyingTo
+        user:currentUser, 
       }]
     }:c
 
